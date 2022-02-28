@@ -75,35 +75,18 @@
       get_vote_type_name = encodeURIComponent(get_vote_type.value);
 
       select_city = document.getElementById("get_city"); 
-      get_city_list()
+      get_city_list()       //取得 city 清單塞進 get_city
       get_city_name = encodeURIComponent(get_city.value);
 
       select_vote_place = document.getElementById("get_vote_place"); 
-      get_vote_place_list()
+      get_vote_place_list() //取得 vote_place 清單塞進 get_vote_place
       get_vote_place_name = encodeURIComponent(get_vote_place.value);
-      
-      //
 
       select_district = document.getElementById("get_district"); 
-      get_district_list()
+      get_district_list()   //取得 district 清單塞進 get_district
       get_district_name = encodeURIComponent(get_district.value)
       
-      function get_vote_map_data(){
-        get_vote_type_name = encodeURIComponent(get_vote_type.value);
-        get_city_name = encodeURIComponent(get_city.value);
-        get_vote_place_name = encodeURIComponent(get_vote_place.value);
-        get_district_name = encodeURIComponent(get_district.value)
-        console.log(map_data_url+get_city_name+'/'+ get_district_name)
-        vote_data = JSON.parse(get_subcount(vote_data_url+get_vote_type_name+'/'+get_city_name+'/'+get_vote_place_name))
-        town_map_data = JSON.parse(get_subcount(map_data_url+get_city_name+'/'+ get_district_name))
-        console.log(town_map_data)
-        console.log(vote_data)
-        coordinate_x = town_map_data['features'][0]['geometry']['coordinates'][0][0][1]
-        coordinate_y = town_map_data['features'][0]['geometry']['coordinates'][0][0][0]
-      }
-
-      
-      get_vote_map_data()
+      get_vote_map_data()   //取得vote_data & town_map_data & 座標
       geojson = L.geoJSON(town_map_data)
       const map = L.map("myMap", {  // 設定地圖中心點與放大倍率
         center: [22.640447, 120.302542],
@@ -133,6 +116,20 @@
         lay.clearLayers();
         lay = L.geoJSON(town_map_data, {onEachFeature: onEachFeature}).addTo(map);
       })
+      
+      function get_vote_map_data(){
+        get_vote_type_name = encodeURIComponent(get_vote_type.value);
+        get_city_name = encodeURIComponent(get_city.value);
+        get_vote_place_name = encodeURIComponent(get_vote_place.value);
+        get_district_name = encodeURIComponent(get_district.value)
+        console.log(map_data_url+get_city_name+'/'+ get_district_name)
+        vote_data = JSON.parse(get_subcount(vote_data_url+get_vote_type_name+'/'+get_city_name+'/'+get_vote_place_name))
+        town_map_data = JSON.parse(get_subcount(map_data_url+get_city_name+'/'+ get_district_name))
+        console.log(town_map_data)
+        console.log(vote_data)
+        coordinate_x = town_map_data['features'][0]['geometry']['coordinates'][0][0][1]
+        coordinate_y = town_map_data['features'][0]['geometry']['coordinates'][0][0][0]
+      }
       function get_city_list(){
         document.getElementById('get_city').innerText = null;	//清空下拉選單
         city_list = [...new Set(JSON.parse(get_subcount(vote_data_url+get_vote_type_name))['data'])]
@@ -193,39 +190,6 @@
       function reset_map_center(map,point){
         map.setView(point, 13, {animation: true})
       }
-
-      fetch('http://tsp.myvnc.com/objects')
-      .then(function(response) {
-        res_data = response.json()
-        return res_data;
-      })
-      .then(function(res_data) {
-        console.log(res_data);
-      
-      // 創建 icon
-      res_data['data'].forEach(item => {
-        const Icon = new L.Icon({
-          iconUrl: item.icon_url,//"https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
-          shadowUrl:"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
-        });
-        // 添加標記點
-        L.marker(item.local, {
-          title: item.name,
-          icon: Icon
-        })
-        .addTo(map)
-        .bindPopup(item.name);
-      });
-    });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { // 載入圖資
-        attribution:
-          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>         contributors'
-      }).addTo(map);
-      
       function getColor(d) {
         return d > 1000 ? '#800026' :
                d > 500  ? '#BD0026' :
@@ -326,7 +290,6 @@
             click: zoomToFeature
         });
       }
-      //////////////////////////////////////////////
       function getKeyByValue(object, value) {
         for (var prop in object) {
             if (object.hasOwnProperty(prop)) {
@@ -335,9 +298,6 @@
             }
         }
     }
-      //////////////////////////////////////////
-      
-
       function update_Pie(e){
         window.myPie.destroy();
         var color_list = []
@@ -393,18 +353,39 @@
         };
         var ctx = document.getElementById('chart-area');//.getContext('2d');
         window.myPie = new Chart(ctx, config);
-        
-        /*
-        config.data.datasets.forEach(function(e) {
-          e.data = candidate_data,
-          e.backgroundColor = color_list
-        });
-        config.data.labels.forEach(function(e) {
-          e.labels = candidate_name
-        });
-        window.myPie.update()*/
       }
       
+      fetch('http://tsp.myvnc.com/objects') // 取得 icon 資料
+      .then(function(response) {
+        res_data = response.json()
+        return res_data;
+      })
+      .then(function(res_data) {
+        console.log(res_data);
+        res_data['data'].forEach(item => {  // 創建 icon
+          const Icon = new L.Icon({
+            iconUrl: item.icon_url,
+            shadowUrl:"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          });
+          // 添加標記點
+          L.marker(item.local, {
+            title: item.name,
+            icon: Icon
+          })
+          .addTo(map)
+          .bindPopup(item.name);
+        })
+      })
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { // 載入圖資
+        attribution:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>         contributors'
+      }).addTo(map);
+      
+      // initialize ChartJs : myPie 
       var color_list = []
       var candidate_data = []
       var candidate_name = []
