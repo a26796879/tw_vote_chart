@@ -97,8 +97,15 @@
       select_vote_type.addEventListener("change", function() {	//get_vote_type的下拉選單有變化時
         get_city_list()
       });
-      select_city.addEventListener("change", function() {	//get_city的下拉選單有變化時
+      select_city.addEventListener("change", function(e) {	//get_city的下拉選單有變化時
         get_vote_place_list()
+        get_district_list()
+        get_vote_map_data()
+        reset_map_center(map,[coordinate_x, coordinate_y])
+        geojson = L.geoJSON(town_map_data)
+        lay.clearLayers();
+        lay = L.geoJSON(town_map_data, {onEachFeature: onEachFeature}).addTo(map);
+        update_Pie(e)
       })
       select_vote_place.addEventListener("change", function(e) {	//get_vote_place的下拉選單有變化時
         get_district_list()
@@ -142,6 +149,8 @@
         }
       }
       function get_vote_place_list(){
+        get_vote_type_name = encodeURIComponent(get_vote_type.value);
+        get_city_name = encodeURIComponent(get_city.value);
         document.getElementById('get_vote_place').innerText = null;	//清空下拉選單
         vote_place_list = [...new Set(JSON.parse(get_subcount(vote_data_url+get_vote_type_name+'/'+get_city_name))['data'])]
         for(var i = 0; i < vote_place_list.length; i++) {	//把01選區~10選區名單塞入get_vote_place的下拉選單中
