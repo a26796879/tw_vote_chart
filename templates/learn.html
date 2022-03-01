@@ -153,6 +153,7 @@
         get_city_name = encodeURIComponent(get_city.value);
         document.getElementById('get_vote_place').innerText = null;	//清空下拉選單
         vote_place_list = [...new Set(JSON.parse(get_subcount(vote_data_url+get_vote_type_name+'/'+get_city_name))['data'])]
+        vote_place_list.sort();
         for(var i = 0; i < vote_place_list.length; i++) {	//把01選區~10選區名單塞入get_vote_place的下拉選單中
           var opt = vote_place_list[i];
           var el = document.createElement("option");
