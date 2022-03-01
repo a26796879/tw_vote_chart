@@ -10,4 +10,6 @@ GCP：部署環境
   
 使用步驟：  
 直接點擊來玩玩看吧  
-http://tsp.myftp.biz/
+http://tsp.myftp.biz/  
+  
+Ajax render
