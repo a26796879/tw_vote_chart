@@ -4,7 +4,7 @@
 (目前只有2018議員) 
   
 工具：  
-後端：使用　flask & uvicorn  
+後端：使用 flask & uvicorn  
 前端：當使用者 下拉式選單改變值時，使用 Ajax 即時call API取得資料並呈現  
 data來源：使用 Odoo 建立圖資及選舉資料 API  ( https://github.com/a26796879/ForTaiwan_odoo )  
 GCP：部署環境  
