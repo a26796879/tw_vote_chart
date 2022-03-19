@@ -31,20 +31,20 @@ def all_towntup_geo_data():
     return True
 
 def all_towntup_vote_data():
-    dirs = os.listdir('vote_dataall_townts/107年直轄市議員/')
+    dirs = os.listdir('vote_datasets/107年直轄市議員/')
     print(dirs)
     for file_name in dirs:
         if '.xls' in file_name:
             city = file_name.split('(')[1].replace(').xls','')
             if city != file_name:
                 try:
-                    os.mkdir(f'vote_dataall_townts/107年直轄市議員/{city}')
+                    os.mkdir(f'vote_datasets/107年直轄市議員/{city}')
                 except:
                     pass
             
-        xl = pd.ExcelFile(f'vote_dataall_townts/107年直轄市議員/{file_name}')
+        xl = pd.ExcelFile(f'vote_datasets/107年直轄市議員/{file_name}')
         for sheet_name in xl.sheet_names:   #歷遍每個sheet
-            df = xl.parall_town(sheet_name)
+            df = xl.parse(sheet_name)
             colNameList = df.columns.tolist()   #取得title
             df.iloc[4,0] = df.iloc[4,0].split('\u3000')[1]
             candidate_col = len(df.columns)-8
@@ -76,10 +76,10 @@ def all_towntup_vote_data():
             df2 = df.groupby(['village_name'], as_index=False).sum()
             df2 = df2.drop(columns=['村里別','投開票所別'])
             df2 = df2.drop([0])
-            row_data_df = df2.all_townt_index('village_name')
-            row_data_df.reall_townt_index(inplace=True)
+            row_data_df = df2.set_index('village_name')
+            row_data_df.reset_index(inplace=True)
             
-            with open(f'vote_dataall_townts/107年直轄市議員/{city}/{sheet_name}.js', 'w') as f:
+            with open(f'vote_datasets/107年直轄市議員/{city}/{sheet_name}.js', 'w') as f:
                 f.write('var vote_data='+ row_data_df.to_json())
 
 if __name__ == '__main__':

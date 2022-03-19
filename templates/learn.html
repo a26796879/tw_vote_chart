@@ -169,7 +169,7 @@
         district_in_place = []
         for(district=0; district<count_vote_data; district++){
           var data = vote_data['village_name'][district]
-          if(data.includes("區") && !(data.includes("里")) && !(data.includes("行政區"))){
+          if(data.includes("區") && (data.length < 5) && !(data.includes("行政區"))){
             district_in_place.push(vote_data['village_name'][district])
           }
         }
@@ -449,4 +449,3 @@
     </script>
   </body>
 </html>
-<!-- 匯出 vote_data 的邏輯，把行政區名有 ”里“ 的都移除了 ex: 佳里區 -->
