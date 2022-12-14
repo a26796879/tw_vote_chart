@@ -26,9 +26,10 @@ const map = L.map("myMap", {  // 設定地圖中心點與放大倍率
 });
 lay = L.geoJSON(town_map_data, { onEachFeature: onEachFeature }).addTo(map);
 select_vote_type.addEventListener("change", function (e) {	//get_vote_type的下拉選單有變化時
-  get_vote_map_data()
   get_city_list()
+  get_vote_place_list()
   get_district_list()
+  get_vote_map_data()
   reset_map_center(map, [coordinate_x, coordinate_y])
   geojson = L.geoJSON(town_map_data)
   lay.clearLayers();
@@ -85,6 +86,7 @@ function get_vote_type_list() {
   }
 }
 function get_city_list() {
+  get_vote_type_name = encodeURIComponent(get_vote_type.value);
   document.getElementById('get_city').innerText = null;	//清空下拉選單
   city_list = [...new Set(JSON.parse(get_subcount(vote_data_url + get_vote_type_name))['data'])]
   for (var i = 0; i < city_list.length; i++) {	      //把縣市名單塞入get_city的下拉選單中
