@@ -130,8 +130,9 @@ function get_subcount(url) {	//get data using jquery.ajax
   var subcount;
   $.ajax({
     url: url,
-    dataType: 'jsonp',
+    datatype: 'json',
     async: false,
+    "Access-Control-Allow-Origin": "*",
     success: function (data) {
       subcount = data;
     }
