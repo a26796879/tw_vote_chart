@@ -77,8 +77,7 @@
     <select id="get_district"></select>
   </div>
   <div id="Bar_Chart"></div>
-  <!--<script src="main.js"></script>-->
-  <script src="{% url_for('static', filename='main.js' %}"></script>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 
 </html>
