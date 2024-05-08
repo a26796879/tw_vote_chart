@@ -132,7 +132,9 @@ function get_subcount(url) {	//get data using jquery.ajax
     url: url,
     datatype: 'json',
     async: false,
-    "Access-Control-Allow-Origin": "*",
+    Headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     success: function (data) {
       subcount = data;
     }
